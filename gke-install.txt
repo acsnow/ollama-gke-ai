@@ -1,0 +1,16 @@
+
+# genai Install GKE cluster with 3 cpu nodes
+gcloud container clusters create demo-genai-01 --project=tfc-sip-01 --num-nodes=3 --node-locations=us-west1-a --machine-type=n2-standard-16 --network=primary-vault-vpc --subnetwork=primary-subnet-01 --region=us-west1 --addons=GcpFilestoreCsiDriver,HttpLoadBalancing,HorizontalPodAutoscaling
+gcloud container node-pools create demo-genai-gpu-01 \
+  --accelerator type=nvidia-l4,count=1,gpu-driver-version=default \
+  --machine-type g2-standard-16 \
+  --num-nodes=3 \
+  --region us-west1 --cluster demo-genai-01
+
+# openai Install GKE cluster
+gcloud container clusters create demo-openai-01 --project=tfc-sip-01 --num-nodes=3 --node-locations=us-west1-a --machine-type=n2-standard-8 --network=primary-vault-vpc --subnetwork=primary-subnet-01 --region=us-west1 --addons=GcpFilestoreCsiDriver,HttpLoadBalancing,HorizontalPodAutoscaling
+gcloud container node-pools create demo-openai-gpu-01 \
+  --accelerator type=nvidia-l4,count=1,gpu-driver-version=default \
+  --machine-type g2-standard-8 \
+  --num-nodes=3 \
+  --region us-west1 --cluster demo-openai-01
